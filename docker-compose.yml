@@ -1,10 +1,9 @@
-version: '3'
-
 services:
   reverse-proxy:
     image: traefik:v2.11
     command:
-      - --api.insecure=true
+      - --api.dashboard=true  # Enables Traefik Dashboard
+      - --api.insecure=true   # Allows dashboard access without authentication
       - --providers.docker
       - --entrypoints.http.address=:80
       - --entrypoints.mysql.address=:3306
@@ -15,6 +14,7 @@ services:
       - "3306:3306"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
   db:
     image: mysql:8
     environment:
@@ -23,7 +23,7 @@ services:
       MYSQL_USER: test_user
       MYSQL_PASSWORD: test_password
     volumes:
-        - ./database/volume:/var/lib/mysql
+      - ./database/volume:/var/lib/mysql
     hostname: database.cc.localhost
     labels:
       - traefik.tcp.routers.mysql.entrypoints=mysql
@@ -33,17 +33,24 @@ services:
       - 8001:3306
 
   api:
-    image: php:8.3-apache
+    #image: php:8.3-apache
+    build:
+      context: ./api
+      dockerfile:
+        Dockerfile
     container_name: api
     depends_on:
       - db
     volumes:
       - ./api/:/var/www/html/
+      - ./api/apache.conf:/etc/apache2/sites-available/000-default.conf  # Mount custom Apache config
     stdin_open: true
     tty: true
     hostname: api.cc.localhost
     labels:
       - traefik.http.routers.api.rule=Host(`api.cc.localhost`)
+    entrypoint: ["/bin/bash", "/var/www/html/entrypoint.sh"]
+
   front:
     image: php:8.3-apache
     container_name: front
@@ -51,8 +58,9 @@ services:
       - api
     volumes:
       - ./front_end/:/var/www/html/
+      - ./front_end/apache.conf:/etc/apache2/sites-available/000-default.conf  # Mount custom Apache config
     stdin_open: true
     tty: true
-    hostname: api.cc.localhost
+    hostname: cc.localhost
     labels:
       - traefik.http.routers.front.rule=Host(`cc.localhost`)
