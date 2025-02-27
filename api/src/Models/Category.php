@@ -6,8 +6,12 @@ use App\Database\Database;
 use PDO;
 
 class Category {
-    public static function getAll() {
-        $pdo = Database::getInstance();
+    /**
+     * @return array
+     */
+    public static function getAll(): array
+    {
+        $pdo = Database::getInstance()->getConnection();
 
         // Fetch all categories
         $categories = $pdo->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
@@ -20,7 +24,8 @@ class Category {
         return $categories;
     }
 
-    private static function countCoursesIncludingChildren($categoryId, $categories, $pdo) {
+    private static function countCoursesIncludingChildren($categoryId, $categories, $pdo): mixed
+    {
         $count = 0;
 
         // Count courses directly in this category
@@ -38,8 +43,9 @@ class Category {
         return $count;
     }
 
-    public static function getById($id) {
-        $pdo = Database::getInstance();
+    public static function getById($id): mixed
+    {
+        $pdo = Database::getInstance()->getConnection();
         $categories = self::getAll();
 
         foreach ($categories as $category) {

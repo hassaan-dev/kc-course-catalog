@@ -6,16 +6,21 @@ use App\Database\Database;
 use PDO;
 
 class Course {
-    public static function getAll($category_id = null) {
-        $pdo = Database::getInstance();
+    /**
+     * @param $category_id
+     * @return array
+     */
+    public static function getAll($category_id = null): array
+    {
+        $pdo = Database::getInstance()->getConnection();
 
         // Fetch all categories for hierarchical lookup
         $categories = $pdo->query("SELECT id, name, parent_id FROM categories")->fetchAll(PDO::FETCH_ASSOC);
 
         // Fetch all courses with their direct category
         $sql = "SELECT courses.*, categories.id AS category_id, categories.name AS category_name
-                FROM courses 
-                JOIN categories ON courses.category_id = categories.id";
+            FROM courses 
+            JOIN categories ON courses.category_id = categories.id";
 
         if ($category_id) {
             $sql .= " WHERE courses.category_id = ?";
@@ -35,7 +40,12 @@ class Course {
         return $courses;
     }
 
-    public static function getById($id) {
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public static function getById($id): mixed
+    {
         $pdo = Database::getInstance();
 
         // Fetch all categories for hierarchical lookup
@@ -56,7 +66,13 @@ class Course {
         return $course;
     }
 
-    private static function getMainCategoryName($categoryId, $categories) {
+    /**
+     * @param $categoryId
+     * @param $categories
+     * @return mixed
+     */
+    private static function getMainCategoryName($categoryId, $categories): mixed
+    {
         while ($categoryId) {
             foreach ($categories as $category) {
                 if ($category['id'] == $categoryId) {

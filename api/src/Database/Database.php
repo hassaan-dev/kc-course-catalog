@@ -6,8 +6,8 @@ use PDO;
 use PDOException;
 
 class Database {
-    private static $instance = null;
-    private $pdo;
+    private static ?Database $instance = null; // Change type to Database
+    private PDO $pdo;
 
     private function __construct() {
         $host = 'database.cc.localhost';
@@ -23,10 +23,24 @@ class Database {
         }
     }
 
-    public static function getInstance() {
-        if (self::$instance == null) {
+    /**
+     * Get the singleton instance of Database.
+     *
+     * @return Database
+     */
+    public static function getInstance(): Database {
+        if (self::$instance === null) {
             self::$instance = new Database();
         }
-        return self::$instance->pdo;
+        return self::$instance;
+    }
+
+    /**
+     * Get the PDO instance.
+     *
+     * @return PDO
+     */
+    public function getConnection(): PDO {
+        return $this->pdo;
     }
 }
