@@ -2,6 +2,20 @@
 
 set -e  # Stop script execution if any command fails
 
+echo "📌 Running entrypoint script..."
+
+# Ensure Composer dependencies are installed
+if [ ! -d "/var/www/html/vendor" ]; then
+    echo "📦 Installing composer dependencies..."
+    composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+else
+    echo "✅ Dependencies already installed."
+fi
+
+# Ensure correct file permissions
+chown -R www-data:www-data /var/www/html
+chmod -R 755 /var/www/html
+
 echo "🚀 Waiting for MySQL to be ready..."
 while ! mysqladmin ping -h database.cc.localhost -u test_user -ptest_password --silent; do
     sleep 2

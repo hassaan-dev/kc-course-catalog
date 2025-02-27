@@ -49,7 +49,7 @@ services:
     hostname: api.cc.localhost
     labels:
       - traefik.http.routers.api.rule=Host(`api.cc.localhost`)
-    entrypoint: ["/bin/bash", "/var/www/html/entrypoint.sh"]
+    entrypoint: ["/entrypoint.sh"]
 
   front:
     image: php:8.3-apache
