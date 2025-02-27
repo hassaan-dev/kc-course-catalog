@@ -4,4 +4,5 @@ api/database/volume
 vendor/
 node_modules/
 .git
-.envcomposer.lock
+.env
+composer.lock
