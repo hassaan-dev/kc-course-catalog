@@ -1,0 +1,93 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 20px;
+}
+.container {
+    display: flex;
+    width: 100%;
+}
+aside {
+    width: 20%;
+    padding: 10px;
+}
+main {
+    width: 80%;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+#categories ul {
+    list-style-type: none;
+    padding-left: 15px;
+}
+
+.category {
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.category:hover {
+    background-color: #f0f0f0;
+}
+
+ul.nested-category {
+    display: none; /* Hide child categories by default */
+    padding-left: 15px;
+}
+
+.toggle-icon {
+    cursor: pointer;
+    font-size: 14px;
+    color: #555;
+}
+
+.course-card {
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    margin: 10px;
+}
+
+.course-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.course-info {
+    padding: 10px;
+}
+
+.course-info h3 {
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.course-info p {
+    font-size: 14px;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.category-tag {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+}
